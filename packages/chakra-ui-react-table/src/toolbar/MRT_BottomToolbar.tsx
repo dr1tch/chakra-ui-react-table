@@ -92,6 +92,7 @@ export const MRT_BottomToolbar = <TData extends Record<string, any> = {}>({
             position: stackAlertBanner ? 'relative' : 'absolute',
             right: 0,
             top: 0,
+            width: '100%',
           }}
         >
           {enablePagination &&

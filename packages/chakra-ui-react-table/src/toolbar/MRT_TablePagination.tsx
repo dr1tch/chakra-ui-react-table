@@ -1,11 +1,5 @@
-import {
-  ActionIcon,
-  Flex,
-  Pagination,
-  Select,
-  Text,
-  type Sx,
-} from '@mantine/core';
+import { IconButton, Flex, Text } from '@chakra-ui/react';
+import Pagination from '../pagination';
 import { type MRT_TableInstance } from '../types';
 
 interface Props<TData extends Record<string, any> = {}> {
@@ -13,7 +7,7 @@ interface Props<TData extends Record<string, any> = {}> {
   table: MRT_TableInstance<TData>;
 }
 
-const commonActionButtonStyles: Sx = {
+const commonActionButtonStyles: Record<string, any> = {
   userSelect: 'none',
   '&:disabled': {
     backgroundColor: 'transparent',
@@ -64,10 +58,11 @@ export const MRT_TablePagination = <TData extends Record<string, any> = {}>({
   return (
     <Flex
       align="center"
-      justify="space-between"
+      justify="end"
       gap="lg"
       py="xs"
       px="sm"
+      width={'100%'}
       mt={
         position === 'top' && enableToolbarInternalActions && !showGlobalFilter
           ? '3rem'
@@ -76,46 +71,23 @@ export const MRT_TablePagination = <TData extends Record<string, any> = {}>({
       p="relative"
       sx={{ zIndex: 2 }}
     >
-      {paginationProps?.showRowsPerPage !== false && (
-        <Select
-          data={
-            paginationProps?.rowsPerPageOptions ?? [
-              '5',
-              '10',
-              '15',
-              '20',
-              '25',
-              '30',
-              '50',
-              '100',
-            ]
-          }
-          label={localization.rowsPerPage}
-          onChange={(value: string) => setPageSize(+value)}
-          value={pageSize.toString()}
-          sx={{
-            '@media (min-width: 720px)': {
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            },
-            '& .mantine-Select-input': {
-              width: '80px',
-            },
-          }}
-          withinPortal
-        />
-      )}
       {paginationDisplayMode === 'pages' ? (
         <Pagination
-          onChange={(newPageIndex) => setPageIndex(newPageIndex - 1)}
+          onChange={(newPageIndex) => {
+            console.log({ newPageIndex });
+            setPageIndex(newPageIndex);
+          }}
+          onRowsPerPageChange={(newPageSize) => setPageSize(newPageSize)}
+          pageSize={pageSize}
           total={numberOfPages}
-          value={pageIndex + 1}
+          value={pageIndex}
           withEdges={showFirstLastPageButtons}
-          nextIcon={IconChevronRight}
-          previousIcon={IconChevronLeft}
-          firstIcon={IconChevronLeftPipe}
-          lastIcon={IconChevronRightPipe}
+          nextIcon={<IconChevronRight />}
+          previousIcon={<IconChevronLeft />}
+          showRowsPerPageOptions={paginationProps?.showRowsPerPageOptions}
+          rowsPerPageOptions={paginationProps?.rowsPerPageOptions}
+          firstIcon={<IconChevronLeftPipe />}
+          lastIcon={<IconChevronRightPipe />}
           {...paginationProps}
         />
       ) : paginationDisplayMode === 'default' ? (
@@ -127,40 +99,40 @@ export const MRT_TablePagination = <TData extends Record<string, any> = {}>({
           } ${totalRowCount.toLocaleString()}`}</Text>
           <Flex gap="xs">
             {showFirstLastPageButtons && (
-              <ActionIcon
+              <IconButton
                 aria-label={localization.goToFirstPage}
                 disabled={pageIndex <= 0}
                 onClick={() => setPageIndex(0)}
                 sx={commonActionButtonStyles}
               >
                 <IconChevronLeftPipe />
-              </ActionIcon>
+              </IconButton>
             )}
-            <ActionIcon
+            <IconButton
               aria-label={localization.goToPreviousPage}
               disabled={pageIndex <= 0}
               onClick={() => setPageIndex(pageIndex - 1)}
               sx={commonActionButtonStyles}
             >
               <IconChevronLeft />
-            </ActionIcon>
-            <ActionIcon
+            </IconButton>
+            <IconButton
               aria-label={localization.goToNextPage}
               disabled={lastRowIndex >= totalRowCount}
               onClick={() => setPageIndex(pageIndex + 1)}
               sx={commonActionButtonStyles}
             >
               <IconChevronRight />
-            </ActionIcon>
+            </IconButton>
             {showFirstLastPageButtons && (
-              <ActionIcon
+              <IconButton
                 aria-label={localization.goToLastPage}
                 disabled={lastRowIndex >= totalRowCount}
                 onClick={() => setPageIndex(numberOfPages - 1)}
                 sx={commonActionButtonStyles}
               >
                 <IconChevronRightPipe />
-              </ActionIcon>
+              </IconButton>
             )}
           </Flex>
         </>
