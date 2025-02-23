@@ -1,5 +1,5 @@
-import Paper, { type PaperProps } from '@mui/material/Paper';
-import { useTheme } from '@mui/material/styles';
+import { Container, type ContainerProps } from '@chakra-ui/react';
+import { useTheme } from 'next-themes';
 import { MRT_TableContainer } from './MRT_TableContainer';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
@@ -7,7 +7,7 @@ import { MRT_BottomToolbar } from '../toolbar/MRT_BottomToolbar';
 import { MRT_TopToolbar } from '../toolbar/MRT_TopToolbar';
 
 export interface MRT_TablePaperProps<TData extends MRT_RowData>
-  extends PaperProps {
+  extends ContainerProps {
   table: MRT_TableInstance<TData>;
 }
 
@@ -35,16 +35,15 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
   };
 
   const theme = useTheme();
-
+  console.log({ theme });
   return (
-    <Paper
+    <Container
       elevation={2}
       onKeyDown={(e) => e.key === 'Escape' && table.setIsFullScreen(false)}
       {...paperProps}
       ref={(ref: HTMLDivElement) => {
         tablePaperRef.current = ref;
         if (paperProps?.ref) {
-          //@ts-expect-error
           paperProps.ref.current = ref;
         }
       }}
@@ -62,18 +61,18 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
               right: 0,
               top: 0,
               width: '100dvw',
-              zIndex: theme.zIndex.modal,
+              // zIndex: theme.zIndex.modal,
             }
           : {}),
         ...paperProps?.style,
       }}
-      sx={(theme) => ({
+      css={{
         backgroundColor: baseBackgroundColor,
         backgroundImage: 'unset',
         overflow: 'hidden',
         transition: 'all 100ms ease-in-out',
-        ...(parseFromValuesOrFunc(paperProps?.sx, theme) as any),
-      })}
+        // ...(parseFromValuesOrFunc(paperProps?.sx, theme) as any),
+      }}
     >
       {enableTopToolbar &&
         (parseFromValuesOrFunc(renderTopToolbar, { table }) ?? (
@@ -84,6 +83,6 @@ export const MRT_TablePaper = <TData extends MRT_RowData>({
         (parseFromValuesOrFunc(renderBottomToolbar, { table }) ?? (
           <MRT_BottomToolbar table={table} />
         ))}
-    </Paper>
+    </Container>
   );
 };

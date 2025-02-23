@@ -1,9 +1,5 @@
 {
-  "include": [
-    "src",
-    "@types/node",
-    "stories"
-  ],
+  "include": ["src", "@types/node", "stories"],
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "types",
@@ -12,11 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "jsx": "react-jsx",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -26,7 +18,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES6",
+    "target": "ES6"
   },
   "references": [
     {

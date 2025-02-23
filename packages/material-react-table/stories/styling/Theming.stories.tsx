@@ -1,4 +1,9 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {
+  ChakraProvider,
+  createSystem,
+  defineConfig,
+  defaultConfig,
+} from '@chakra-ui/react';
 import { type MRT_ColumnDef, MaterialReactTable } from '../../src';
 import { faker } from '@faker-js/faker';
 import { type Meta } from '@storybook/react';
@@ -40,41 +45,41 @@ export const DefaultTheme = () => (
 );
 
 export const CustomLightTheme = () => {
-  const theme = createTheme({
-    palette: {
-      background: {
-        default: '#ffffef',
-      },
-      primary: {
-        main: '#ff9800',
-      },
-      secondary: {
-        main: '#00bcd4',
+  const theme = defineConfig({
+    theme: {
+      tokens: {
+        colors: {
+          default: { value: '#ffffef' },
+          primary: { value: '#ff9800' },
+          secondary: { value: '#00bcd4' },
+        },
       },
     },
   });
+
+  const customTheme = createSystem(defaultConfig, theme);
   return (
-    <ThemeProvider theme={theme}>
+    <ChakraProvider value={customTheme}>
       <MaterialReactTable columns={columns} data={data} enableRowSelection />
-    </ThemeProvider>
+    </ChakraProvider>
   );
 };
 
-export const CustomDarkTheme = () => {
-  const theme = createTheme({
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: '#81980f',
-      },
-      secondary: {
-        main: '#00bcd4',
-      },
-    },
-  });
-  return (
-    <ThemeProvider theme={theme}>
-      <MaterialReactTable columns={columns} data={data} enableRowSelection />
-    </ThemeProvider>
-  );
-};
+// export const CustomDarkTheme = () => {
+//   const theme = createSystem({
+//     palette: {
+//       mode: 'dark',
+//       primary: {
+//         main: '#81980f',
+//       },
+//       secondary: {
+//         main: '#00bcd4',
+//       },
+//     },
+//   });
+//   return (
+//     <ChakraProvider value={theme}>
+//       <MaterialReactTable columns={columns} data={data} enableRowSelection />
+//     </ChakraProvider>
+//   );
+// };

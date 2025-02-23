@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import Table, { type TableProps } from '@mui/material/Table';
+import { Table, type TableRootProps } from '@chakra-ui/react';
 import { useMRT_ColumnVirtualizer } from '../../hooks/useMRT_ColumnVirtualizer';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseCSSVarId } from '../../utils/style.utils';
@@ -8,7 +8,8 @@ import { MRT_TableBody, Memo_MRT_TableBody } from '../body/MRT_TableBody';
 import { MRT_TableFooter } from '../footer/MRT_TableFooter';
 import { MRT_TableHead } from '../head/MRT_TableHead';
 
-export interface MRT_TableProps<TData extends MRT_RowData> extends TableProps {
+export interface MRT_TableProps<TData extends MRT_RowData>
+  extends TableRootProps {
   table: MRT_TableInstance<TData>;
 }
 
@@ -60,16 +61,16 @@ export const MRT_Table = <TData extends MRT_RowData>({
   };
 
   return (
-    <Table
+    <Table.Root
       stickyHeader={enableStickyHeader || isFullScreen}
       {...tableProps}
       style={{ ...columnSizeVars, ...tableProps?.style }}
-      sx={(theme) => ({
+      css={{
         borderCollapse: 'separate',
         display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
         position: 'relative',
-        ...(parseFromValuesOrFunc(tableProps?.sx, theme) as any),
-      })}
+        // ...(parseFromValuesOrFunc(tableProps?.sx, theme) as any),
+      }}
     >
       {!!Caption && <caption>{Caption}</caption>}
       {enableTableHead && <MRT_TableHead {...commonTableGroupProps} />}
@@ -79,6 +80,6 @@ export const MRT_Table = <TData extends MRT_RowData>({
         <MRT_TableBody {...commonTableGroupProps} />
       )}
       {enableTableFooter && <MRT_TableFooter {...commonTableGroupProps} />}
-    </Table>
+    </Table.Root>
   );
 };

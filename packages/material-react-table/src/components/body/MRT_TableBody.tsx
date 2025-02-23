@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import { type VirtualItem } from '@tanstack/react-virtual';
-import TableBody, { type TableBodyProps } from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
+import { Table, type TableBodyProps } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { MRT_TableBodyRow, Memo_MRT_TableBodyRow } from './MRT_TableBodyRow';
 import { useMRT_RowVirtualizer } from '../../hooks/useMRT_RowVirtualizer';
 import { useMRT_Rows } from '../../hooks/useMRT_Rows';
@@ -80,15 +80,15 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
     <>
       {!rowPinningDisplayMode?.includes('sticky') &&
         getIsSomeRowsPinned('top') && (
-          <TableBody
+          <Table.Body
             {...tableBodyProps}
-            sx={(theme) => ({
+            css={{
               display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
               position: 'sticky',
               top: tableHeadHeight - 1,
               zIndex: 1,
-              ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
-            })}
+              // ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
+            }}
           >
             {getTopRows().map((row, staticRowIndex) => {
               const props = {
@@ -102,36 +102,36 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
                 <MRT_TableBodyRow key={row.id} {...props} />
               );
             })}
-          </TableBody>
+          </Table.Body>
         )}
-      <TableBody
+      <Table.Body
         {...tableBodyProps}
-        sx={(theme) => ({
+        css={{
           display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
           height: rowVirtualizer
             ? `${rowVirtualizer.getTotalSize()}px`
             : undefined,
           minHeight: !rows.length ? '100px' : undefined,
           position: 'relative',
-          ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
-        })}
+          // ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
+        }}
       >
         {tableBodyProps?.children ??
           (!rows.length ? (
-            <tr
+            <Table.Row
               style={{
                 display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
               }}
             >
-              <td
+              <Table.Cell
                 colSpan={table.getVisibleLeafColumns().length}
                 style={{
                   display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
                 }}
               >
                 {renderEmptyRowsFallback?.({ table }) ?? (
-                  <Typography
-                    sx={{
+                  <Text
+                    css={{
                       color: 'text.secondary',
                       fontStyle: 'italic',
                       maxWidth: `min(100vw, ${
@@ -145,10 +145,10 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
                     {globalFilter || columnFilters.length
                       ? localization.noResultsFound
                       : localization.noRecordsToDisplay}
-                  </Typography>
+                  </Text>
                 )}
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ) : (
             <>
               {(virtualRows ?? rows).map((rowOrVirtualRow, staticRowIndex) => {
@@ -184,18 +184,18 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
               })}
             </>
           ))}
-      </TableBody>
+      </Table.Body>
       {!rowPinningDisplayMode?.includes('sticky') &&
         getIsSomeRowsPinned('bottom') && (
-          <TableBody
+          <Table.Body
             {...tableBodyProps}
-            sx={(theme) => ({
+            sx={{
               bottom: tableFooterHeight - 1,
               display: layoutMode?.startsWith('grid') ? 'grid' : undefined,
               position: 'sticky',
               zIndex: 1,
-              ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
-            })}
+              // ...(parseFromValuesOrFunc(tableBodyProps?.sx, theme) as any),
+            }}
           >
             {getBottomRows().map((row, staticRowIndex) => {
               const props = {
@@ -209,7 +209,7 @@ export const MRT_TableBody = <TData extends MRT_RowData>({
                 <MRT_TableBodyRow key={row.id} {...props} />
               );
             })}
-          </TableBody>
+          </Table.Body>
         )}
     </>
   );

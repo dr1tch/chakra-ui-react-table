@@ -1,27 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import { withThemeByClassName } from '@storybook/addon-themes';
+import type { Preview, ReactRenderer } from '@storybook/react';
+import React, { useEffect } from 'react';
 import { addons } from '@storybook/preview-api';
-import { Preview } from '@storybook/react';
-import { useDarkMode, DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { CssBaseline } from '@mui/material';
+
+import { ColorModeProvider } from '../src/components/ui/color-mode';
+import {
+  ChakraProvider,
+  createSystem,
+  defaultConfig,
+  Link,
+  Text,
+} from '@chakra-ui/react';
 
 const channel = addons.getChannel();
 
-const lightTheme = createTheme({
-  palette: { mode: 'light' },
-});
-
-const darkTheme = createTheme({
-  palette: { mode: 'dark' },
+const system = createSystem(defaultConfig, {
+  theme: {
+    tokens: {
+      fonts: {
+        heading: { value: 'Inter, sans-serif' },
+        body: { value: 'Inter, sans-serif' },
+        mono: { value: 'Roboto Mono, monospace' },
+      },
+    },
+  },
 });
 
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
+    options: {
+      storySort: {
+        method: 'alphabetical',
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -30,21 +42,14 @@ const preview: Preview = {
     },
   },
   decorators: [
+    withThemeByClassName<ReactRenderer>({
+      defaultTheme: 'light',
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+    }),
     (Story, context) => {
-      const [isDark, setDark] = useState(true);
-      const theme = isDark ? darkTheme : lightTheme;
-
-      useEffect(() => {
-        const sbRoot = document.getElementsByClassName(
-          'sb-show-main',
-        )[0] as HTMLElement;
-        channel.on(DARK_MODE_EVENT_NAME, setDark);
-        if (sbRoot) {
-          sbRoot.style.backgroundColor = theme.palette.background.default;
-        }
-        return () => channel.off(DARK_MODE_EVENT_NAME, setDark);
-      }, [theme]);
-
       useEffect(() => {
         if (process.env.NODE_ENV === 'development') return;
         const script = document.createElement('script');
@@ -57,17 +62,13 @@ const preview: Preview = {
           document.body.removeChild(script);
         };
       }, []);
-
       return (
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Typography
-              sx={{
+        <ColorModeProvider>
+          <ChakraProvider value={system}>
+            <Text
+              css={{
                 pb: '0.5rem',
-                color: useDarkMode() ? '#fff' : '#666',
               }}
-              variant="subtitle2"
             >
               Looking for the main docs site? Click{' '}
               <Link
@@ -77,12 +78,10 @@ const preview: Preview = {
               >
                 here.
               </Link>
-            </Typography>
-            <Typography
-              variant="subtitle2"
-              sx={{
+            </Text>
+            <Text
+              css={{
                 pb: '1rem',
-                color: useDarkMode() ? '#fff' : '#666',
               }}
             >
               View Source code for these examples in the code tab below or{' '}
@@ -92,10 +91,11 @@ const preview: Preview = {
               >
                 here on GitHub.
               </Link>
-            </Typography>
+            </Text>
             <Story {...context} />
-          </LocalizationProvider>
-        </ThemeProvider>
+            <Story />
+          </ChakraProvider>
+        </ColorModeProvider>
       );
     },
   ],

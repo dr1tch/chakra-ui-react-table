@@ -39,12 +39,13 @@ import {
   type Virtualizer,
   type VirtualizerOptions,
 } from '@tanstack/react-virtual';
-import { type AlertProps } from '@mui/material/Alert';
-import { type AutocompleteProps } from '@mui/material/Autocomplete';
-import { type BoxProps } from '@mui/material/Box';
-import { type ButtonProps } from '@mui/material/Button';
-import { type CheckboxProps } from '@mui/material/Checkbox';
-import { type ChipProps } from '@mui/material/Chip';
+import {
+  type BoxProps,
+  type ButtonProps,
+  type TagRootProps,
+  type AlertRootProps,
+} from '@chakra-ui/react';
+import { type CheckboxProps } from './components/ui/checkbox';
 import { type CircularProgressProps } from '@mui/material/CircularProgress';
 import { type DialogProps } from '@mui/material/Dialog';
 import { type IconButtonProps } from '@mui/material/IconButton';
@@ -584,8 +585,8 @@ export interface MRT_ColumnDef<TData extends MRT_RowData, TValue = unknown>
     | ((props: {
         column: MRT_Column<TData>;
         table: MRT_TableInstance<TData>;
-      }) => AutocompleteProps<any, any, any, any>)
-    | AutocompleteProps<any, any, any, any>;
+      }) => HTMLDivElement)
+    | HTMLDivElement;
   muiFilterCheckboxProps?:
     | ((props: {
         column: MRT_Column<TData>;
@@ -984,8 +985,8 @@ export interface MRT_TableOptions<TData extends MRT_RowData>
     | ((props: {
         column: MRT_Column<TData>;
         table: MRT_TableInstance<TData>;
-      }) => AutocompleteProps<any, any, any, any>)
-    | AutocompleteProps<any, any, any, any>;
+      }) => HTMLDivElement)
+    | HTMLDivElement;
   muiFilterCheckboxProps?:
     | ((props: {
         column: MRT_Column<TData>;
@@ -1135,11 +1136,11 @@ export interface MRT_TableOptions<TData extends MRT_RowData>
     | ((props: { table: MRT_TableInstance<TData> }) => TableProps)
     | TableProps;
   muiToolbarAlertBannerChipProps?:
-    | ((props: { table: MRT_TableInstance<TData> }) => ChipProps)
-    | ChipProps;
+    | ((props: { table: MRT_TableInstance<TData> }) => TagRootProps)
+    | TagRootProps;
   muiToolbarAlertBannerProps?:
-    | ((props: { table: MRT_TableInstance<TData> }) => AlertProps)
-    | AlertProps;
+    | ((props: { table: MRT_TableInstance<TData> }) => AlertRootProps)
+    | AlertRootProps;
   muiTopToolbarProps?:
     | ((props: { table: MRT_TableInstance<TData> }) => BoxProps)
     | BoxProps;

@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import { Box, Stack } from '@chakra-ui/react';
 import {
   MRT_AggregationFns,
   type MRT_ColumnDef,
@@ -46,7 +45,7 @@ const columns = [
       <>
         Max by{' '}
         {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '}
-        <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+        <Box css={{ color: 'success.main', fontWeight: 'bold' }}>
           {cell.getValue<number>()}
         </Box>
       </>
@@ -63,7 +62,7 @@ const columns = [
   },
   {
     GroupedCell: ({ cell }) => (
-      <Box sx={{ color: 'primary.main' }}>{cell.getValue<string>()}</Box>
+      <Box css={{ color: 'primary.main' }}>{cell.getValue<string>()}</Box>
     ),
     accessorKey: 'gender',
     header: 'Gender',
@@ -77,7 +76,7 @@ const columns = [
       <>
         Average by{' '}
         {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '}
-        <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+        <Box css={{ color: 'success.main', fontWeight: 'bold' }}>
           {cell.getValue<number>()?.toLocaleString?.('en-US', {
             currency: 'USD',
             maximumFractionDigits: 0,
@@ -210,7 +209,7 @@ export const MultiAggregationPerColumn = () => (
           <>
             Min by{' '}
             {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box css={{ color: 'success.main', fontWeight: 'bold' }}>
               {cell.getValue<[number, number]>()[0]}
             </Box>
             <br />
@@ -218,7 +217,7 @@ export const MultiAggregationPerColumn = () => (
             {
               table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header
             }:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box css={{ color: 'success.main', fontWeight: 'bold' }}>
               {cell.getValue<[number, number]>()[1]}
             </Box>
           </>
@@ -239,7 +238,7 @@ export const MultiAggregationPerColumn = () => (
       },
       {
         GroupedCell: ({ cell }) => (
-          <Box sx={{ color: 'primary.main' }}>{cell.getValue<string>()}</Box>
+          <Box css={{ color: 'primary.main' }}>{cell.getValue<string>()}</Box>
         ),
         accessorKey: 'gender',
         header: 'Gender',
@@ -252,7 +251,7 @@ export const MultiAggregationPerColumn = () => (
         AggregatedCell: ({ cell, table }) => (
           <>
             Count:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box css={{ color: 'success.main', fontWeight: 'bold' }}>
               {cell.getValue<[number, number]>()?.[0]}
             </Box>
             <br />
@@ -260,7 +259,7 @@ export const MultiAggregationPerColumn = () => (
             {
               table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header
             }:{' '}
-            <Box sx={{ color: 'success.main', fontWeight: 'bold' }}>
+            <Box css={{ color: 'success.main', fontWeight: 'bold' }}>
               {cell
                 .getValue<[number, number]>()?.[1]
                 ?.toLocaleString?.('en-US', {

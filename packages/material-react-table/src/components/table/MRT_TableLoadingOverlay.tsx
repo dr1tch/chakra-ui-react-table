@@ -1,13 +1,14 @@
-import Box from '@mui/material/Box';
-import CircularProgress, {
-  type CircularProgressProps,
-} from '@mui/material/CircularProgress';
-import { alpha } from '@mui/material/styles';
+import {
+  Box,
+  ProgressCircle,
+  type ProgressCircleRootProps,
+} from '@chakra-ui/react';
+// import { alpha } from '@mui/material/styles';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
 import { parseFromValuesOrFunc } from '../../utils/utils';
 
 export interface MRT_TableLoadingOverlayProps<TData extends MRT_RowData>
-  extends CircularProgressProps {
+  extends ProgressCircleRootProps {
   table: MRT_TableInstance<TData>;
 }
 
@@ -31,9 +32,9 @@ export const MRT_TableLoadingOverlay = <TData extends MRT_RowData>({
 
   return (
     <Box
-      sx={{
+      css={{
         alignItems: 'center',
-        backgroundColor: alpha(baseBackgroundColor, 0.5),
+        backgroundColor: `${baseBackgroundColor}/50`,
         bottom: 0,
         display: 'flex',
         justifyContent: 'center',
@@ -47,11 +48,18 @@ export const MRT_TableLoadingOverlay = <TData extends MRT_RowData>({
       }}
     >
       {circularProgressProps?.Component ?? (
-        <CircularProgress
+        <ProgressCircle.Root
+          value={null}
+          size="sm"
           aria-label={localization.noRecordsToDisplay}
           id={`mrt-progress-${id}`}
           {...circularProgressProps}
-        />
+        >
+          <ProgressCircle.Circle>
+            <ProgressCircle.Track />
+            <ProgressCircle.Range />
+          </ProgressCircle.Circle>
+        </ProgressCircle.Root>
       )}
     </Box>
   );

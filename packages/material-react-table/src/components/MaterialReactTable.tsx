@@ -6,7 +6,7 @@ import {
   type Xor,
 } from '../types';
 import { MRT_TablePaper } from './table/MRT_TablePaper';
-
+import { Provider } from './ui/provider';
 type TableInstanceProp<TData extends MRT_RowData> = {
   table: MRT_TableInstance<TData>;
 };
@@ -24,6 +24,7 @@ const isTableInstanceProp = <TData extends MRT_RowData>(
 export const MaterialReactTable = <TData extends MRT_RowData>(
   props: MaterialReactTableProps<TData>,
 ) => {
+  console.log({ theme: props.mrtTheme });
   let table: MRT_TableInstance<TData>;
 
   if (isTableInstanceProp(props)) {
@@ -32,5 +33,9 @@ export const MaterialReactTable = <TData extends MRT_RowData>(
     table = useMaterialReactTable(props);
   }
 
-  return <MRT_TablePaper table={table} />;
+  return (
+    <Provider>
+      <MRT_TablePaper table={table} />;
+    </Provider>
+  );
 };

@@ -1,8 +1,15 @@
-import Dialog, { type DialogProps } from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Stack from '@mui/material/Stack';
+import {
+  DialogActionTrigger,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  type DialogContentProps,
+} from '../ui/dialog';
+import { DialogOpenChangeDetails, Stack } from '@chakra-ui/react';
 import {
   type MRT_Row,
   type MRT_RowData,
@@ -13,7 +20,7 @@ import { MRT_EditActionButtons } from '../buttons/MRT_EditActionButtons';
 import { MRT_EditCellTextField } from '../inputs/MRT_EditCellTextField';
 
 export interface MRT_EditRowModalProps<TData extends MRT_RowData>
-  extends Partial<DialogProps> {
+  extends Partial<DialogContentProps> {
   open: boolean;
   table: MRT_TableInstance<TData>;
 }
@@ -59,10 +66,14 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
     ));
 
   return (
-    <Dialog
+    <DialogRoot
       fullWidth
       maxWidth="xs"
-      onClose={(event, reason) => {
+      onOpenChange={(event: DialogOpenChangeDetails) => {
+        // @ts-expect-error
+        if (event.open) {
+          return;
+        }
         if (creatingRow) {
           onCreatingRowCancel?.({ row, table });
           setCreatingRow(null);
@@ -71,7 +82,7 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
           setEditingRow(null);
         }
         row._valuesCache = {} as any; //reset values cache
-        dialogProps.onClose?.(event, reason);
+        dialogProps.onClose?.(event);
       }}
       open={open}
       {...dialogProps}
@@ -87,14 +98,18 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
           row,
           table,
         })) ?? (
-        <>
-          <DialogTitle sx={{ textAlign: 'center' }}>
-            {localization.edit}
-          </DialogTitle>
-          <DialogContent>
+        // @ts-expect-error
+        <DialogContent>
+          <DialogHeader>
+            {/* @ts-expect-error */}
+            <DialogTitle css={{ textAlign: 'center' }}>
+              <span>{localization.edit}</span>
+            </DialogTitle>
+          </DialogHeader>
+          <DialogBody>
             <form onSubmit={(e) => e.preventDefault()}>
               <Stack
-                sx={{
+                css={{
                   gap: '32px',
                   paddingTop: '16px',
                   width: '100%',
@@ -103,12 +118,15 @@ export const MRT_EditRowModal = <TData extends MRT_RowData>({
                 {internalEditComponents}
               </Stack>
             </form>
-          </DialogContent>
-          <DialogActions sx={{ p: '1.25rem' }}>
-            <MRT_EditActionButtons row={row} table={table} variant="text" />
-          </DialogActions>
-        </>
+          </DialogBody>
+          <DialogFooter>
+            <DialogActionTrigger css={{ p: '1.25rem' }} asChild>
+              <MRT_EditActionButtons row={row} table={table} variant="text" />
+            </DialogActionTrigger>
+          </DialogFooter>
+          <DialogCloseTrigger />
+        </DialogContent>
       )}
-    </Dialog>
+    </DialogRoot>
   );
 };

@@ -1,7 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import TableContainer, {
-  type TableContainerProps,
-} from '@mui/material/TableContainer';
+import {Box type BoxProps } from '@chakra-ui/react';
 import { MRT_Table } from './MRT_Table';
 import { MRT_TableLoadingOverlay } from './MRT_TableLoadingOverlay';
 import { type MRT_RowData, type MRT_TableInstance } from '../../types';
@@ -13,7 +11,7 @@ const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export interface MRT_TableContainerProps<TData extends MRT_RowData>
-  extends TableContainerProps {
+  extends BoxProps {
   table: MRT_TableInstance<TData>;
 }
 
@@ -71,7 +69,7 @@ export const MRT_TableContainer = <TData extends MRT_RowData>({
   const editModalOpen = editDisplayMode === 'modal' && editingRow;
 
   return (
-    <TableContainer
+    <Box
       aria-busy={loading}
       aria-describedby={loading ? 'mrt-progress' : undefined}
       {...tableContainerProps}
@@ -79,7 +77,6 @@ export const MRT_TableContainer = <TData extends MRT_RowData>({
         if (node) {
           tableContainerRef.current = node;
           if (tableContainerProps?.ref) {
-            //@ts-expect-error
             tableContainerProps.ref.current = node;
           }
         }
@@ -90,15 +87,15 @@ export const MRT_TableContainer = <TData extends MRT_RowData>({
           : undefined,
         ...tableContainerProps?.style,
       }}
-      sx={(theme) => ({
+      sx={{
         maxHeight: enableStickyHeader
           ? `clamp(350px, calc(100vh - ${totalToolbarHeight}px), 9999px)`
           : undefined,
         maxWidth: '100%',
         overflow: 'auto',
         position: 'relative',
-        ...(parseFromValuesOrFunc(tableContainerProps?.sx, theme) as any),
-      })}
+        // ...(parseFromValuesOrFunc(tableContainerProps?.sx, theme) as any),
+      }}
     >
       {loading ? <MRT_TableLoadingOverlay table={table} /> : null}
       <MRT_Table table={table} />
@@ -106,6 +103,6 @@ export const MRT_TableContainer = <TData extends MRT_RowData>({
         <MRT_EditRowModal open table={table} />
       )}
       {enableCellActions && actionCell && <MRT_CellActionMenu table={table} />}
-    </TableContainer>
+    </Box>
   );
 };
